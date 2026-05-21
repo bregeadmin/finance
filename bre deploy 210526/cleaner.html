@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>bre · клининг</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#FBF8F1;--bg-2:#F4EFE3;--paper:#FDFBF6;
+  --ink:#0A0908;--ink-soft:#4D544E;--ink-fade:#8A8A82;
+  --line:#E8DEC5;--line-2:#D9CFB4;
+  --accent:#FF5E1A;
+  --amber:#EF9F27;
+  --purple:#7F77DD;
+  --green-cat:#5DCAA5;
+  --negative:#D94B4E;
+  --r-card:18px;--r-mid:12px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;line-height:1.4}
+body{padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;max-width:560px;margin:0 auto;min-height:100dvh}
+button{font-family:inherit;cursor:pointer}
+
+/* Header */
+.head{padding:20px 0 12px 0}
+.head-brand{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:13px;color:var(--ink-fade);letter-spacing:-.02em;text-transform:lowercase;
+  display:flex;align-items:baseline;gap:6px;margin-bottom:14px;
+}
+.head-brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);transform:translateY(2px)}
+.head-brand .sub{color:var(--ink-fade);font-weight:400;font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.18em;margin-left:6px}
+.head-hi{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:32px;letter-spacing:-.03em;line-height:1.05;color:var(--ink);
+}
+.head-hi b{font-style:italic;font-weight:600;color:var(--accent)}
+.head-date{
+  margin-top:6px;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--ink-fade);
+}
+
+/* Section headers */
+.sect{margin:24px 0 10px 0}
+.sect-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.2em;
+}
+.sect-meta{font-size:11px;color:var(--ink-fade);margin-left:6px}
+
+/* Day-group inside upcoming/recent sections — heading + cleanings list under it. */
+.day-group{margin-bottom:14px}
+.day-group-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  padding:6px 2px 8px 2px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:10px;
+}
+.day-group-date{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:15px;letter-spacing:-.01em;color:var(--ink);
+  text-transform:lowercase;line-height:1;
+}
+.day-group-count{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.14em;
+}
+
+/* Cleaning card */
+.cln-card{
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--r-card);padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:12px;transition:border-color .15s, box-shadow .15s;
+}
+.cln-card.is-today{border-color:var(--line-2)}
+.cln-card.is-now{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(255,94,26,0.10);
+}
+.cln-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.cln-time{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:26px;
+  letter-spacing:-.01em;color:var(--ink);line-height:1;
+}
+.cln-time-sub{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-fade);
+  text-transform:uppercase;letter-spacing:.14em;margin-top:3px;
+}
+.cln-apt{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:18px;letter-spacing:-.01em;line-height:1.15;color:var(--ink);
+  flex:1;min-width:0;
+}
+.cln-meta{
+  display:flex;flex-direction:column;gap:4px;
+  font-size:13px;color:var(--ink-soft);
+}
+.cln-meta-row{display:flex;align-items:center;gap:6px}
+.cln-meta-row i{font-size:14px;color:var(--ink-fade);flex-shrink:0}
+.cln-meta-row a{color:var(--ink-soft);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px}
+.cln-notes{
+  background:var(--bg-2);border-radius:10px;padding:9px 12px;
+  font-size:13px;color:var(--ink);line-height:1.4;
+}
+.cln-notes::before{
+  content:'заметка';font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;color:var(--ink-fade);
+  text-transform:uppercase;letter-spacing:.16em;
+  display:block;margin-bottom:4px;
+}
+
+/* Status pill (display only — actions live in the action row) */
+.cln-status{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:999px;
+  background:var(--bg-2);border:1px solid var(--line);
+  font-size:11.5px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);
+  white-space:nowrap;
+}
+.cln-status::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--ink-fade);flex-shrink:0;
+}
+.cln-status.is-awaiting_checkout::before{background:var(--ink-fade)}
+.cln-status.is-ready_to_start::before{background:var(--amber)}
+.cln-status.is-in_progress::before{background:var(--purple)}
+.cln-status.is-done::before{background:#C6F432}
+.cln-status.is-verified::before{background:var(--green-cat)}
+.cln-status.is-cancelled::before{background:var(--ink-fade);opacity:.4}
+
+/* Action button */
+.cln-action{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;min-height:48px;
+  border:0;border-radius:12px;background:var(--ink);color:#fff;
+  font-family:inherit;font-size:15px;font-weight:600;letter-spacing:.01em;
+  transition:transform .08s, box-shadow .15s, background-color .15s;
+}
+.cln-action:hover{background:#1A1916}
+.cln-action:active{transform:scale(0.98)}
+.cln-action.is-primary{background:var(--accent)}
+.cln-action.is-primary:hover{background:#E5501A}
+.cln-action.is-amber{background:var(--amber);color:#fff}
+.cln-action.is-amber:hover{background:#D88B1F}
+.cln-action.is-success{background:var(--green-cat);color:#fff}
+.cln-action.is-success:hover{background:#4FB793}
+.cln-action.is-done{
+  background:transparent;border:1px solid var(--line);color:var(--ink-fade);font-weight:500;
+}
+/* Verified — celebratory state: filled green with soft glow + checkmark. */
+.cln-action.is-verified{
+  background:var(--green-cat);color:#fff;font-weight:700;
+  box-shadow:0 0 0 4px rgba(93,202,165,0.20), 0 4px 14px -4px rgba(93,202,165,0.45);
+  border:0;
+  letter-spacing:.01em;
+}
+.cln-action.is-verified[disabled]{opacity:1;cursor:default}
+.cln-action.is-verified i{font-size:20px}
+.cln-action[disabled]:not(.is-verified){opacity:.5;pointer-events:none}
+.cln-action[disabled].is-verified{pointer-events:none}
+.cln-action i{font-size:18px}
+
+/* Checklist — shown on active/done cleanings. Tap an item to toggle. */
+.chk-wrap{
+  margin-top:4px;padding:12px;background:var(--bg-2);border-radius:12px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.chk-head{display:flex;align-items:center;justify-content:space-between}
+.chk-title{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.16em;
+}
+.chk-progress{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+  color:var(--ink-soft);letter-spacing:.04em;
+}
+.chk-bar{
+  width:100%;height:4px;background:var(--line);border-radius:4px;overflow:hidden;
+}
+.chk-bar-fill{
+  height:100%;background:var(--green-cat);
+  transition:width .3s ease;
+}
+.chk-items{display:flex;flex-direction:column;gap:6px}
+.chk-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:10px;border:1px solid transparent;
+  background:var(--paper);text-align:left;
+  font-family:inherit;font-size:14px;color:var(--ink);line-height:1.3;
+  transition:background-color .12s, border-color .12s, color .12s;
+  width:100%;
+}
+.chk-item:hover{border-color:var(--line)}
+.chk-item:active{transform:scale(0.99)}
+.chk-box{
+  width:22px;height:22px;border-radius:6px;
+  border:2px solid var(--line-2);background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;
+}
+.chk-box i{font-size:14px;color:#fff;opacity:0;transform:scale(.6);transition:all .15s}
+.chk-item.is-done .chk-box{background:var(--green-cat);border-color:var(--green-cat)}
+.chk-item.is-done .chk-box i{opacity:1;transform:scale(1)}
+.chk-item.is-done .chk-lbl{color:var(--ink-fade);text-decoration:line-through;text-decoration-color:var(--ink-fade)}
+.chk-lbl{flex:1;min-width:0}
+
+/* Structured checklist — sectioned, typed items. */
+.ci-sections{display:flex;flex-direction:column;gap:14px}
+.ci-section{
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;display:flex;flex-direction:column;gap:12px;
+}
+.ci-section-head{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  color:var(--ink);text-transform:uppercase;letter-spacing:.18em;
+  padding-bottom:6px;border-bottom:1px solid var(--line);
+}
+.ci-row{display:flex;flex-direction:column;gap:8px}
+.ci-label{
+  font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.3;
+}
+.ci-req{color:var(--accent);margin-left:3px}
+.ci-pills{display:flex;flex-wrap:wrap;gap:6px}
+.ci-pill{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 14px;min-height:36px;
+  border:1.5px solid var(--line-2);border-radius:999px;
+  background:var(--paper);color:var(--ink-soft);
+  font-family:inherit;font-size:13px;font-weight:500;line-height:1;
+  cursor:pointer;transition:all .12s;
+}
+.ci-pill:hover{border-color:var(--ink-fade);color:var(--ink)}
+.ci-pill:active{transform:scale(0.97)}
+.ci-pill.is-on{
+  background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600;
+}
+.ci-input{
+  width:100%;padding:9px 12px;
+  border:1.5px solid var(--line-2);border-radius:10px;
+  background:var(--paper);color:var(--ink);
+  font-family:inherit;font-size:14px;outline:none;
+  transition:border-color .12s;
+}
+.ci-input:focus{border-color:var(--accent)}
+.ci-textarea{resize:vertical;min-height:42px;line-height:1.4}
+
+/* Control photo slot — distinct from standard slots */
+.ph-tile.is-control{
+  border-color:var(--accent);border-style:solid;
+  background:rgba(255,94,26,0.04);
+}
+.ph-tile.is-control .ph-slot-lbl{
+  color:#fff;background:var(--accent);
+  letter-spacing:.1em;
+}
+.ph-tile.is-control.is-filled .ph-slot-lbl{
+  background:var(--accent);
+}
+.ph-control-badge{
+  position:absolute;top:6px;left:6px;
+  padding:3px 7px;border-radius:6px;
+  background:var(--accent);color:#fff;
+  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.14em;
+  z-index:1;
+}
+
+/* Photo report — tap a tile to take/replace a photo for the slot */
+.ph-wrap{
+  margin-top:4px;padding:12px;background:var(--bg-2);border-radius:12px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.ph-head{display:flex;align-items:center;justify-content:space-between}
+.ph-title{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.16em;
+}
+.ph-progress{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+  color:var(--ink-soft);letter-spacing:.04em;
+}
+.ph-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+}
+.ph-tile{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;
+  aspect-ratio:1/1;border-radius:12px;
+  background:var(--paper);border:1.5px dashed var(--line-2);
+  font-family:inherit;color:var(--ink-soft);cursor:pointer;
+  overflow:hidden;padding:0;
+  transition:border-color .15s, background-color .15s, transform .08s;
+}
+.ph-tile:hover{border-color:var(--ink-fade);background:#FFFEFB}
+.ph-tile:active{transform:scale(0.985)}
+.ph-tile.is-filled{border-style:solid;border-color:var(--line);background:#000}
+.ph-tile.is-filled:hover{border-color:var(--ink-fade)}
+.ph-tile.is-busy{border-style:solid;border-color:var(--line-2);background:var(--bg-2);cursor:wait}
+.ph-plus{
+  width:44px;height:44px;border-radius:50%;background:var(--bg-2);
+  display:flex;align-items:center;justify-content:center;color:var(--ink-soft);
+}
+.ph-plus i{font-size:22px}
+.ph-slot-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.12em;
+  position:absolute;left:0;right:0;bottom:8px;text-align:center;pointer-events:none;
+}
+.ph-tile.is-filled .ph-slot-lbl{
+  color:#fff;background:rgba(10,9,8,0.5);
+  padding:4px 0;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  letter-spacing:.1em;
+}
+.ph-thumb{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  display:block;background:#1a1a1a;
+}
+.ph-retake{
+  position:absolute;top:6px;right:6px;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(10,9,8,0.55);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.ph-retake i{font-size:13px}
+.ph-spinner{
+  width:24px;height:24px;border-radius:50%;
+  border:2.5px solid var(--line);border-top-color:var(--accent);
+  animation:ph-spin .8s linear infinite;
+}
+@keyframes ph-spin{to{transform:rotate(360deg)}}
+
+/* Verified cleaning — compact «принято» plate. Replaces the full working surface
+   once admin has accepted the work, so cleaner sees clear status without clutter. */
+.cln-verified-card{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1.5px solid var(--green-cat);border-radius:var(--r-card);
+  padding:14px 16px;margin-bottom:12px;
+  box-shadow:0 0 0 4px rgba(93,202,165,0.08);
+}
+.cvc-ico{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:var(--green-cat);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+.cvc-ico i{font-size:22px}
+.cvc-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.cvc-title{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:16px;letter-spacing:-.01em;color:var(--ink);
+  line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cvc-sub{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.1em;
+}
+.cvc-stamp{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  color:var(--green-cat);text-transform:uppercase;letter-spacing:.14em;
+  white-space:nowrap;flex-shrink:0;
+  padding:5px 9px;border-radius:8px;
+  background:rgba(93,202,165,0.10);
+}
+
+/* Compact future / past row */
+.cln-mini{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:10px;
+  background:var(--paper);border:1px solid var(--line);
+  margin-bottom:6px;
+}
+.cln-mini-time{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+  color:var(--ink);min-width:48px;
+}
+.cln-mini-apt{flex:1;font-size:13.5px;color:var(--ink);font-weight:500;min-width:0}
+.cln-mini-date{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.1em;
+}
+
+/* Empty state */
+.empty{
+  text-align:center;padding:40px 16px;color:var(--ink-fade);
+}
+.empty i{font-size:36px;display:block;margin-bottom:12px;opacity:.4}
+.empty-msg{font-size:14px;line-height:1.4}
+
+/* Error / invalid token */
+.gate{
+  min-height:80dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:20px;
+}
+.gate i{font-size:48px;color:var(--ink-fade);margin-bottom:16px}
+.gate h1{
+  font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:700;
+  margin:0 0 10px 0;letter-spacing:-.02em;
+}
+.gate p{color:var(--ink-soft);font-size:14px;max-width:300px;line-height:1.5}
+
+/* Admin preview banner — shown when ?preview=1 to signal read-only inspection mode. */
+.preview-banner{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;gap:8px;
+  padding:9px 14px;
+  background:var(--accent);color:#fff;
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  margin:-1px -16px 14px -16px;
+}
+.preview-banner i{font-size:14px}
+
+/* Celebration toast — verified-transition feedback */
+.toast-celebrate{
+  position:fixed;inset:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  background:rgba(10,9,8,0.45);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  animation:tc-fade .3s ease;
+}
+@keyframes tc-fade{from{opacity:0}to{opacity:1}}
+.tc-card{
+  width:100%;max-width:340px;
+  background:var(--paper);border-radius:20px;
+  padding:30px 24px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  box-shadow:0 24px 60px -20px rgba(10,9,8,0.4);
+  animation:tc-pop .35s cubic-bezier(.2,1.2,.4,1);
+}
+@keyframes tc-pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.tc-ico{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--green-cat);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 6px rgba(93,202,165,0.20);
+  margin-bottom:6px;
+}
+.tc-ico i{font-size:42px}
+.tc-title{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:24px;letter-spacing:-.02em;line-height:1.1;color:var(--ink);
+}
+.tc-sub{
+  font-size:14px;color:var(--ink-soft);line-height:1.4;
+  max-width:260px;
+}
+.tc-btn{
+  margin-top:14px;width:100%;min-height:48px;
+  border:0;border-radius:12px;background:var(--ink);color:#fff;
+  font-family:inherit;font-size:15px;font-weight:600;
+  cursor:pointer;transition:background-color .15s;
+}
+.tc-btn:hover{background:#1A1916}
+.tc-btn:active{transform:scale(.98)}
+
+/* Loading */
+.loading{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--ink-fade);text-transform:uppercase;letter-spacing:.2em;
+  z-index:100;transition:opacity .25s;
+}
+.loading.fade{opacity:0;pointer-events:none}
+
+@media (max-width:380px){
+  body{padding-left:12px;padding-right:12px}
+  .head-hi{font-size:28px}
+  .cln-time{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">загрузка…</div>
+
+<!-- Invalid token / no access -->
+<div id="gate" style="display:none">
+  <div class="gate">
+    <i class="ti ti-lock"></i>
+    <h1>Ссылка недействительна</h1>
+    <p>Эта ссылка устарела или была отозвана. Попроси новую у Артёма.</p>
+  </div>
+</div>
+
+<!-- Admin preview banner — only shown when ?preview=1 -->
+<div id="preview-banner" style="display:none" class="preview-banner">
+  <i class="ti ti-eye"></i>
+  <span>режим просмотра — как видит клинер. действия отключены.</span>
+</div>
+
+<!-- Main view -->
+<div id="app" style="display:none">
+  <div class="head">
+    <div class="head-brand"><span>bre<span class="dot"></span></span><span class="sub">клининг</span></div>
+    <div class="head-hi">привет, <b id="hi-name">—</b></div>
+    <div class="head-date" id="hi-date"></div>
+  </div>
+  <div id="content"></div>
+</div>
+
+<!-- Celebration toast — fires when one or more cleanings transition into `verified`. -->
+<div class="toast-celebrate" id="toast-celebrate" style="display:none">
+  <div class="tc-card">
+    <div class="tc-ico"><i class="ti ti-circle-check-filled"></i></div>
+    <div class="tc-title">уборка принята</div>
+    <div class="tc-sub" id="tc-sub">—</div>
+    <button class="tc-btn" onclick="dismissToast()">спасибо</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// MINIMAL BOOTSTRAP — Supabase REST client (only what cleaner page needs)
+// ============================================================
+const SUPA_URL = 'https://qkzinjawtumhjbezlyog.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFremluamF3dHVtaGpiZXpseW9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NTE3NDgsImV4cCI6MjA5NDIyNzc0OH0.u_BEKndkTR-SNRl0GSn9i4PTU3Jlrq2dKbD_Dw4l3bQ';
+const SB_HEADERS = {'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=representation'};
+
+async function sbGet(table, filter=''){
+  const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${filter}&limit=10000`, {headers:SB_HEADERS});
+  return r.json();
+}
+async function sbUpsert(table, data){
+  const r = await fetch(`${SUPA_URL}/rest/v1/${table}`, {
+    method:'POST',
+    headers:{...SB_HEADERS,'Prefer':'resolution=merge-duplicates,return=minimal'},
+    body: JSON.stringify(Array.isArray(data)?data:[data])
+  });
+  return r;
+}
+
+// ============================================================
+// LOCAL STATE (minimal slice of admin's S)
+// ============================================================
+const S = { cleaners: [], cleanings: [], bookings: [], owners: {} };
+let ME = null; // the cleaner this page belongs to
+
+// ============================================================
+// Helpers
+// ============================================================
+function todayYMD(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+const WEEKDAYS_LONG_RU = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const MONTHS_RU = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const MONTHS_SHORT_RU = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+function fmtDateLongRu(ymd){
+  const [y,m,d] = ymd.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  return `${WEEKDAYS_LONG_RU[dt.getDay()]}, ${d} ${MONTHS_RU[m-1]}`;
+}
+function fmtDateShortRu(ymd){
+  const [y,m,d] = ymd.split('-').map(Number);
+  return `${d} ${MONTHS_SHORT_RU[m-1]}`;
+}
+// Friendly day label — "завтра, 23 мая", "понедельник, 26 мая", "вчера, 20 мая" ...
+// Used as the heading for day-groups in the upcoming/recent sections.
+function friendlyDayLabel(ymd){
+  if(!ymd) return '—';
+  const today = todayYMD();
+  const [ty,tm,td] = today.split('-').map(Number);
+  const todayDate = new Date(ty, tm-1, td);
+  const [y,m,d] = ymd.split('-').map(Number);
+  const target = new Date(y, m-1, d);
+  const diffDays = Math.round((target - todayDate) / 86400000);
+  const monthLbl = MONTHS_RU[m-1];
+  if(diffDays === 0) return `сегодня, ${d} ${monthLbl}`;
+  if(diffDays === 1) return `завтра, ${d} ${monthLbl}`;
+  if(diffDays === -1) return `вчера, ${d} ${monthLbl}`;
+  if(diffDays === 2)  return `послезавтра, ${d} ${monthLbl}`;
+  // Same week (next 7 days or last 7) — use weekday name
+  if(diffDays >= -6 && diffDays <= 6){
+    const dow = WEEKDAYS_LONG_RU[target.getDay()];
+    return `${dow}, ${d} ${monthLbl}`;
+  }
+  return `${d} ${monthLbl}`;
+}
+function cleaningTime(cg){
+  const s = String(cg.scheduled_at || '');
+  const m = s.match(/T(\d{2}:\d{2})/);
+  if(m) return m[1];
+  if(cg.bookingId){
+    const b = S.bookings.find(x => x.id === cg.bookingId);
+    if(b && b.coTime) return b.coTime;
+  }
+  return '12:00';
+}
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Russian plural picker: pluralRu(N, 'уборка','уборки','уборок') → correct form for N.
+function pluralRu(n, one, few, many){
+  const mod10 = n % 10, mod100 = n % 100;
+  if(mod10 === 1 && mod100 !== 11) return one;
+  if(mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
+  return many;
+}
+
+// Status labels (only the ones a cleaner cares about)
+const STATUS_LBL = {
+  awaiting_checkout: 'ждёт выезда гостя',
+  ready_to_start:    'можно начинать',
+  in_progress:       'в процессе',
+  done:              'готово, ждёт проверки',
+  verified:          'проверено',
+  cancelled:         'отменено'
+};
+
+// Default cleaning checklist — structured into sections with typed items.
+// Used when an apt has no custom `cleaningChecklist`.
+//
+// Item types:
+//   'radio'  — single choice from `options`, value: string | null
+//   'multi'  — multi-select checkboxes from `options`, value: string[]
+//   'number' — numeric input, value: string (kept as string for empty handling)
+//   'text'   — free-form text input, value: string
+//
+// `required: true` means the item counts toward progress/completion.
+// `showIf: {itemId, equals}` makes an item conditionally visible.
+const DEFAULT_CHECKLIST = [
+  {
+    section: 'постельное / текстиль',
+    items: [
+      {id:'bed-changed',       type:'radio',  label:'постель заменена полностью (основной + доп. комплект)', options:['да','нет'], required:true},
+      {id:'bed-spare-count',   type:'number', label:'комплектов в запасе на след. заезд'},
+      {id:'towels-present',    type:'multi',  label:'полотенца в наличии', options:['большие','малые','для ног','кухонные']},
+      {id:'towels-next-count', type:'text',   label:'полотенца на след. заезд — сколько'},
+      {id:'textile-issues',    type:'text',   label:'состояние текстиля — если есть проблемы'}
+    ]
+  },
+  {
+    section: 'расходники',
+    items: [
+      {id:'tp-laid',         type:'number', label:'туалетная бумага положена (норма: 2 рулона)'},
+      {id:'tp-spare',        type:'radio',  label:'запас рулонов на след. заезд', options:['да','нет'], required:true},
+      {id:'hygiene',         type:'multi',  label:'гигиена в наличии', options:['мыло','шампунь','гель для душа','ватные диски/палочки']},
+      {id:'kitchen-supplies',type:'multi',  label:'кухонные расходники', options:['чай','кофе','сахар','соль/перец','масло','губка','средство для посуды']}
+    ]
+  },
+  {
+    section: 'техника — проверить работу',
+    items: [
+      {id:'tech-check', type:'multi', label:'всё включается', options:['свет','Wi-Fi','ТВ','кондиционер','фен'], required:true}
+    ]
+  },
+  {
+    section: 'уборка',
+    items: [
+      {id:'clean-kitchen',  type:'multi', label:'кухня',  options:['плита чистая','раковина','холодильник','нет запаха'], required:true},
+      {id:'clean-bathroom', type:'multi', label:'ванная', options:['унитаз','раковина','душ/ванна','зеркало','слив прочищен от волос','лоток стиралки вымыт'], required:true},
+      {id:'clean-rooms',    type:'multi', label:'комнаты', options:['пыль убрана','пол чистый','нет запахов','нет лишних вещей'], required:true}
+    ]
+  },
+  {
+    section: 'проблемы',
+    items: [
+      {id:'had-issues',  type:'radio', label:'были проблемы?', options:['да','нет'], required:true},
+      {id:'issues-text', type:'text',  label:'опишите проблему', showIf:{itemId:'had-issues', equals:'да'}}
+    ]
+  }
+];
+
+// Effective checklist template for an apartment — apt override or default.
+function effectiveChecklistTemplate(apt){
+  const cfg = S.owners[apt] || {};
+  if(Array.isArray(cfg.cleaningChecklist) && cfg.cleaningChecklist.length
+      && cfg.cleaningChecklist[0] && cfg.cleaningChecklist[0].section){
+    return JSON.parse(JSON.stringify(cfg.cleaningChecklist));
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
+}
+
+function defaultValueForType(t){
+  if(t === 'multi')  return [];
+  if(t === 'radio')  return null;
+  return '';
+}
+
+// Default photo slots — areas cleaner photographs as proof of clean state.
+// Per-apt override: S.owners[apt].cleaningPhotoSlots = [...]
+const DEFAULT_PHOTO_SLOTS = ['комнаты', 'кровать', 'ванная', 'кухня', 'расходники'];
+
+function effectivePhotoSlots(apt){
+  const cfg = S.owners[apt] || {};
+  if(Array.isArray(cfg.cleaningPhotoSlots) && cfg.cleaningPhotoSlots.length){
+    return cfg.cleaningPhotoSlots.slice();
+  }
+  return DEFAULT_PHOTO_SLOTS.slice();
+}
+
+// Random «control» photo pool — one item picked per cleaning, fixed at first display.
+// Designed to prevent pre-staging: each item shows a place that's actually impacted
+// by cleaning (либо often-missed либо visible state of cleanliness).
+const CONTROL_PHOTO_POOL = [
+  'общий вид кухни сверху',
+  'пустое мусорное ведро изнутри',
+  'холодильник изнутри',
+  'лоток стиральной машины',
+  'подоконник',
+  'зеркало в ванной крупно',
+  'душевая лейка / смеситель',
+  'угол комнаты на полу',
+  'крышка унитаза изнутри',
+  'решётка вытяжки на кухне'
+];
+
+// Storage bucket name — keep in sync with admin and Supabase dashboard.
+const STORAGE_BUCKET = 'cleaning-photos';
+
+// ============================================================
+// Photo compression + upload helpers
+// ============================================================
+// Compress a File to a JPEG Blob ~150KB. Resizes long edge to 1280px max.
+async function compressImage(file, maxDim = 1280, quality = 0.78){
+  const dataUrl = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+  const img = await new Promise((res, rej) => {
+    const im = new Image();
+    im.onload = () => res(im);
+    im.onerror = rej;
+    im.src = dataUrl;
+  });
+  const ratio = Math.min(1, maxDim / Math.max(img.width, img.height));
+  const w = Math.round(img.width * ratio);
+  const h = Math.round(img.height * ratio);
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, w, h);
+  return await new Promise((res) => canvas.toBlob(res, 'image/jpeg', quality));
+}
+
+// Supabase Storage requires ASCII object keys. Transliterate Cyrillic + strip any
+// other non-ASCII so slot names like «гостиная» become «gostinaya» on the storage path.
+// The display value (cyrillic) stays intact — only the path is sanitised.
+const RU_TO_LAT = {
+  'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z',
+  'и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+  'с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ch','ш':'sh','щ':'sch',
+  'ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
+};
+function slugForPath(s){
+  return String(s||'').toLowerCase()
+    .split('').map(ch => (RU_TO_LAT[ch] !== undefined ? RU_TO_LAT[ch] : ch)).join('')
+    .replace(/[^a-z0-9_-]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 40) || 'slot';
+}
+
+// Upload a blob to the cleaning-photos bucket. Returns the storage path on success.
+async function uploadPhotoBlob(cleaningId, slot, blob){
+  const path = `${cleaningId}/${slugForPath(slot)}.jpg`;
+  const url = `${SUPA_URL}/storage/v1/object/${STORAGE_BUCKET}/${path}`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${SUPA_KEY}`,
+      'apikey': SUPA_KEY,
+      'Content-Type': 'image/jpeg',
+      'x-upsert': 'true'  // overwrite if cleaner re-takes the photo
+    },
+    body: blob
+  });
+  if(!r.ok){
+    const txt = await r.text().catch(()=> '');
+    throw new Error(`upload failed ${r.status}: ${txt}`);
+  }
+  return path;
+}
+
+// Get a short-lived signed URL for a stored photo path. Returns null on failure.
+async function getSignedPhotoUrl(path, expiresIn = 3600){
+  if(!path) return null;
+  const r = await fetch(`${SUPA_URL}/storage/v1/object/sign/${STORAGE_BUCKET}/${encodeURI(path)}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${SUPA_KEY}`,
+      'apikey': SUPA_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ expiresIn })
+  });
+  if(!r.ok) return null;
+  const j = await r.json().catch(()=> null);
+  if(!j) return null;
+  const sig = j.signedURL || j.signedUrl;
+  return sig ? `${SUPA_URL}/storage/v1${sig}` : null;
+}
+
+// Local cache for signed URLs (one session). Reset on reload.
+const SIGNED_URL_CACHE = {};
+async function cachedSignedUrl(path){
+  if(!path) return null;
+  if(SIGNED_URL_CACHE[path]) return SIGNED_URL_CACHE[path];
+  const url = await getSignedPhotoUrl(path);
+  if(url) SIGNED_URL_CACHE[path] = url;
+  return url;
+}
+
+// Effective checklist template for an apartment — apt override or default.
+function effectiveChecklistTemplate(apt){
+  const cfg = S.owners[apt] || {};
+  if(Array.isArray(cfg.cleaningChecklist) && cfg.cleaningChecklist.length){
+    return cfg.cleaningChecklist.slice();
+  }
+  return DEFAULT_CHECKLIST.slice();
+}
+
+// Ensure a cleaning has its checklist initialised. Returns the sectioned array.
+// Items are identified by (section + id); when the template adds new items, they get
+// default-empty values. Values for items that still exist are preserved across template
+// changes. Old flat-format checklists (pre-structured) are dropped silently.
+function ensureChecklist(cg){
+  if(!cg) return [];
+  const template = effectiveChecklistTemplate(cg.obj);
+  // Detect new structured shape; if existing is the old flat shape, treat as missing.
+  const isStructured = Array.isArray(cg.checklist)
+    && cg.checklist[0] && cg.checklist[0].section && Array.isArray(cg.checklist[0].items);
+  const existing = isStructured ? cg.checklist : [];
+  const valuesByKey = {};
+  existing.forEach(sec => {
+    if(!sec || !Array.isArray(sec.items)) return;
+    sec.items.forEach(it => {
+      if(it && it.id) valuesByKey[`${sec.section}::${it.id}`] = it.value;
+    });
+  });
+  cg.checklist = template.map(sec => ({
+    section: sec.section,
+    items: sec.items.map(it => {
+      const key = `${sec.section}::${it.id}`;
+      const v = valuesByKey[key];
+      return { ...it, value: (v !== undefined ? v : defaultValueForType(it.type)) };
+    })
+  }));
+  return cg.checklist;
+}
+
+// Is a single item "complete" for progress purposes? Used only when required:true.
+function itemIsComplete(it){
+  if(!it) return false;
+  if(it.type === 'radio')  return it.value != null && it.value !== '';
+  if(it.type === 'multi')  return Array.isArray(it.value) && it.value.length > 0;
+  if(it.type === 'number') return it.value != null && String(it.value).trim() !== '';
+  if(it.type === 'text')   return typeof it.value === 'string' && it.value.trim() !== '';
+  return false;
+}
+
+// Should this item be shown right now (respecting showIf dependencies)?
+function itemIsVisible(it, sectionItems){
+  if(!it || !it.showIf) return true;
+  const dep = sectionItems.find(x => x && x.id === it.showIf.itemId);
+  if(!dep) return true;
+  return dep.value === it.showIf.equals;
+}
+
+// ============================================================
+// Token extraction + validation
+// ============================================================
+function getToken(){
+  const params = new URLSearchParams(window.location.search);
+  return params.get('c') || '';
+}
+// Preview mode — when admin opens cleaner.html?c=...&preview=1 to «look as the cleaner».
+// Disables all writes/actions so admin can't accidentally flip statuses.
+function isPreviewMode(){
+  const params = new URLSearchParams(window.location.search);
+  return params.get('preview') === '1';
+}
+
+// ============================================================
+// Load data
+// ============================================================
+async function loadAll(){
+  const [sets, bks] = await Promise.all([
+    sbGet('settings'),
+    sbGet('bookings','order=ci.desc&limit=200')
+  ]);
+  if(Array.isArray(sets)){
+    const get = (k) => { const r = sets.find(s => s.key === k); try{ return r ? JSON.parse(r.value) : null; }catch(e){ return null; } };
+    S.cleaners  = get('cleaners')  || [];
+    S.cleanings = get('cleanings') || [];
+    S.owners    = get('owners')    || {};
+  }
+  if(Array.isArray(bks)){
+    // Map snake_case → camelCase for the few fields we need
+    S.bookings = bks.map(r => ({
+      id:r.id, obj:r.obj, guest:r.guest||'', ci:r.ci, co:r.co, nights:r.nights,
+      adults:r.adults, source:r.source, coTime:r.co_time
+    }));
+  }
+}
+
+// ============================================================
+// Actions — set status, persist to Supabase
+// ============================================================
+async function setStatus(cleaningId, newStatus){
+  if(isPreviewMode()){ alert('Режим просмотра. Действия отключены — это страница глазами клинера.'); return; }
+  const cg = S.cleanings.find(c => c.id === cleaningId);
+  if(!cg) return;
+  cg.status = newStatus;
+  const nowIso = new Date().toISOString();
+  if(newStatus === 'in_progress' && !cg.started_at)  cg.started_at  = nowIso;
+  if(newStatus === 'done'        && !cg.finished_at) cg.finished_at = nowIso;
+  // optimistic re-render
+  render();
+  try{
+    await sbUpsert('settings', [{key:'cleanings', value: JSON.stringify(S.cleanings)}]);
+  }catch(e){ console.warn('persist failed', e); }
+}
+
+// Open native camera/file picker for a slot, compress + upload + persist.
+// We trigger a hidden <input type=file capture=environment>; mobile shows the camera,
+// desktop shows the file chooser.
+function pickAndUploadPhoto(cleaningId, slot){
+  if(isPreviewMode()){ alert('Режим просмотра. Загрузка фото отключена.'); return; }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.capture = 'environment';  // hint mobile to prefer rear camera
+  input.style.display = 'none';
+  document.body.appendChild(input);
+  input.addEventListener('change', async () => {
+    const file = input.files && input.files[0];
+    document.body.removeChild(input);
+    if(!file) return;
+    await uploadAndPersistPhoto(cleaningId, slot, file);
+  }, { once: true });
+  input.click();
+}
+
+async function uploadAndPersistPhoto(cleaningId, slot, file){
+  const cg = S.cleanings.find(c => c.id === cleaningId);
+  if(!cg) return;
+  // Optimistic: render a busy tile while the upload happens
+  cg._uploadingSlots = cg._uploadingSlots || {};
+  cg._uploadingSlots[slot] = true;
+  render();
+  try{
+    const blob = await compressImage(file);
+    const path = await uploadPhotoBlob(cleaningId, slot, blob);
+    // photoUrls MUST be a plain object, not an array — array prop assignment doesn't survive JSON.
+    if(!cg.photoUrls || typeof cg.photoUrls !== 'object' || Array.isArray(cg.photoUrls)){
+      cg.photoUrls = {};
+    }
+    cg.photoUrls[slot] = path;
+    delete cg._uploadingSlots[slot];
+    // Drop any stale signed URL for this path so the new one is fetched next render.
+    delete SIGNED_URL_CACHE[path];
+    await sbUpsert('settings', [{key:'cleanings', value: JSON.stringify(S.cleanings)}]);
+    render();
+  }catch(e){
+    console.error('photo upload failed', e);
+    delete cg._uploadingSlots[slot];
+    render();
+    // Surface the real error to the user — they don't have DevTools.
+    const msg = e && e.message ? e.message : String(e);
+    alert('Ошибка загрузки фото:\n\n' + msg + '\n\nПерешли этот текст разработчику.');
+  }
+}
+
+// Generic value setter for any checklist item. Persists with debounce-style flush
+// (latest call wins — fine for tap-driven flows).
+async function setChecklistValue(cleaningId, secIdx, itemIdx, value){
+  if(isPreviewMode()) return;
+  const cg = S.cleanings.find(c => c.id === cleaningId);
+  if(!cg) return;
+  const list = ensureChecklist(cg);
+  const item = list[secIdx] && list[secIdx].items && list[secIdx].items[itemIdx];
+  if(!item) return;
+  item.value = value;
+  render();
+  try{
+    await sbUpsert('settings', [{key:'cleanings', value: JSON.stringify(S.cleanings)}]);
+  }catch(e){ console.warn('checklist persist failed', e); }
+}
+
+function toggleMultiOption(cleaningId, secIdx, itemIdx, option){
+  if(isPreviewMode()) return;
+  const cg = S.cleanings.find(c => c.id === cleaningId);
+  if(!cg) return;
+  const list = ensureChecklist(cg);
+  const item = list[secIdx] && list[secIdx].items && list[secIdx].items[itemIdx];
+  if(!item) return;
+  const cur = Array.isArray(item.value) ? item.value.slice() : [];
+  const i = cur.indexOf(option);
+  if(i >= 0) cur.splice(i, 1); else cur.push(option);
+  setChecklistValue(cleaningId, secIdx, itemIdx, cur);
+}
+
+// Debounced text input — collects keystrokes, persists ~600ms after last edit.
+const _textInputTimers = {};
+function setTextInput(cleaningId, secIdx, itemIdx, value){
+  if(isPreviewMode()) return;
+  const cg = S.cleanings.find(c => c.id === cleaningId);
+  if(!cg) return;
+  const list = ensureChecklist(cg);
+  const item = list[secIdx] && list[secIdx].items && list[secIdx].items[itemIdx];
+  if(!item) return;
+  item.value = value;
+  // No re-render mid-typing (would steal focus). Persist with delay.
+  const key = `${cleaningId}::${secIdx}::${itemIdx}`;
+  if(_textInputTimers[key]) clearTimeout(_textInputTimers[key]);
+  _textInputTimers[key] = setTimeout(async () => {
+    try{ await sbUpsert('settings', [{key:'cleanings', value: JSON.stringify(S.cleanings)}]); }
+    catch(e){ console.warn('text persist failed', e); }
+  }, 600);
+}
+
+// Radio change handler — re-renders so showIf-dependent items appear/disappear.
+function setRadioValue(cleaningId, secIdx, itemIdx, value){
+  setChecklistValue(cleaningId, secIdx, itemIdx, value);
+}
+
+// ============================================================
+// Render
+// ============================================================
+function actionForStatus(cg){
+  // Returns { label, icon, kind, next } or null if no action
+  switch(cg.status){
+    case 'awaiting_checkout':
+      return { label:'гость выехал', icon:'ti-door-exit', kind:'is-amber', next:'ready_to_start' };
+    case 'ready_to_start':
+      return { label:'начал уборку', icon:'ti-player-play', kind:'is-primary', next:'in_progress' };
+    case 'in_progress':
+      return { label:'сдать на проверку', icon:'ti-send', kind:'is-success', next:'done' };
+    case 'done':
+    case 'verified':
+    case 'cancelled':
+    default:
+      return null;
+  }
+}
+
+// Pick + persist a random control photo slot for this cleaning. Once chosen,
+// the slot is fixed — even if cleaner reloads the page, they see the same task.
+function ensureControlPhotoSlot(cg){
+  if(!cg) return null;
+  if(cg.controlPhotoSlot && CONTROL_PHOTO_POOL.includes(cg.controlPhotoSlot)){
+    return cg.controlPhotoSlot;
+  }
+  const pick = CONTROL_PHOTO_POOL[Math.floor(Math.random() * CONTROL_PHOTO_POOL.length)];
+  cg.controlPhotoSlot = pick;
+  // Fire-and-forget persistence — don't block rendering
+  if(typeof sbUpsert === 'function'){
+    sbUpsert('settings', [{key:'cleanings', value: JSON.stringify(S.cleanings)}]).catch(e => console.warn('control slot sync:', e));
+  }
+  return pick;
+}
+
+function photosHtml(cg){
+  // Show photos block on same active states as checklist
+  const visibleStates = ['ready_to_start','in_progress','done','verified'];
+  if(!visibleStates.includes(cg.status)) return '';
+  const stdSlots = effectivePhotoSlots(cg.obj);
+  const ctrlSlot = ensureControlPhotoSlot(cg);
+  // All slots = standard + control. Control is rendered with a distinct badge/border.
+  const allSlots = stdSlots.concat(ctrlSlot ? [ctrlSlot] : []);
+  const uploaded = (cg.photoUrls && typeof cg.photoUrls === 'object' && !Array.isArray(cg.photoUrls)) ? cg.photoUrls : {};
+  const busy = cg._uploadingSlots || {};
+  const filled = allSlots.filter(s => uploaded[s]).length;
+  const tiles = allSlots.map(slot => {
+    const path = uploaded[slot];
+    const isBusy = !!busy[slot];
+    const isControl = slot === ctrlSlot;
+    // Tile state: empty (+ icon), busy (spinner), filled (thumbnail)
+    let inner = '';
+    if(isControl){
+      inner += `<span class="ph-control-badge">контроль</span>`;
+    }
+    if(isBusy){
+      inner += `<span class="ph-spinner"></span><span class="ph-slot-lbl">${esc(slot)}</span>`;
+    } else if(path){
+      inner += `<img class="ph-thumb" data-path="${esc(path)}" alt="${esc(slot)}" loading="lazy"><span class="ph-slot-lbl">${esc(slot)}</span><span class="ph-retake"><i class="ti ti-refresh"></i></span>`;
+    } else {
+      inner += `<span class="ph-plus"><i class="ti ti-camera"></i></span><span class="ph-slot-lbl">${esc(slot)}</span>`;
+    }
+    const cls = `ph-tile${path ? ' is-filled' : ''}${isBusy ? ' is-busy' : ''}${isControl ? ' is-control' : ''}`;
+    return `<button class="${cls}" onclick="pickAndUploadPhoto('${cg.id}','${esc(slot)}')">${inner}</button>`;
+  }).join('');
+  return `<div class="ph-wrap">
+    <div class="ph-head">
+      <span class="ph-title">фото-отчёт</span>
+      <span class="ph-progress">${filled}/${allSlots.length}</span>
+    </div>
+    <div class="ph-grid">${tiles}</div>
+  </div>`;
+}
+
+// After render, fill in any data-path thumbnails with their signed URLs (async).
+async function hydratePhotoThumbnails(){
+  const nodes = Array.from(document.querySelectorAll('img.ph-thumb[data-path]'));
+  await Promise.all(nodes.map(async (img) => {
+    const path = img.getAttribute('data-path');
+    if(!path) return;
+    const url = await cachedSignedUrl(path);
+    if(url){ img.src = url; img.removeAttribute('data-path'); }
+  }));
+}
+
+// Render a single typed item inside a section. Args:
+//   cgId, secIdx, itemIdx — for handler refs
+//   item    — the item object (with .value)
+//   sectionItems — sibling items in the same section (for showIf resolution)
+function itemHtml(cgId, secIdx, itemIdx, item, sectionItems){
+  if(!itemIsVisible(item, sectionItems)) return '';
+  const lbl = esc(item.label);
+  const required = item.required ? '<span class="ci-req">*</span>' : '';
+  if(item.type === 'radio'){
+    const opts = (item.options || []).map(opt => {
+      const on = item.value === opt;
+      const safe = esc(opt);
+      return `<button type="button" class="ci-pill ${on?'is-on':''}" onclick="setRadioValue('${cgId}',${secIdx},${itemIdx},'${safe.replace(/'/g,"\\'")}')">${safe}</button>`;
+    }).join('');
+    return `<div class="ci-row">
+      <div class="ci-label">${lbl}${required}</div>
+      <div class="ci-pills">${opts}</div>
+    </div>`;
+  }
+  if(item.type === 'multi'){
+    const opts = (item.options || []).map(opt => {
+      const cur = Array.isArray(item.value) ? item.value : [];
+      const on = cur.includes(opt);
+      const safe = esc(opt);
+      return `<button type="button" class="ci-pill ${on?'is-on':''}" onclick="toggleMultiOption('${cgId}',${secIdx},${itemIdx},'${safe.replace(/'/g,"\\'")}')">${safe}</button>`;
+    }).join('');
+    return `<div class="ci-row">
+      <div class="ci-label">${lbl}${required}</div>
+      <div class="ci-pills">${opts}</div>
+    </div>`;
+  }
+  if(item.type === 'number'){
+    const v = (item.value != null ? String(item.value) : '');
+    return `<div class="ci-row">
+      <div class="ci-label">${lbl}${required}</div>
+      <input class="ci-input" type="number" inputmode="numeric" value="${v.replace(/"/g,'&quot;')}" oninput="setTextInput('${cgId}',${secIdx},${itemIdx}, this.value)">
+    </div>`;
+  }
+  // text (default)
+  const v = (item.value != null ? String(item.value) : '');
+  return `<div class="ci-row">
+    <div class="ci-label">${lbl}${required}</div>
+    <textarea class="ci-input ci-textarea" rows="2" oninput="setTextInput('${cgId}',${secIdx},${itemIdx}, this.value)">${esc(v)}</textarea>
+  </div>`;
+}
+
+function checklistHtml(cg){
+  const visibleStates = ['ready_to_start','in_progress','done','verified'];
+  if(!visibleStates.includes(cg.status)) return '';
+  const list = ensureChecklist(cg);
+  if(!list.length) return '';
+  // Progress: required items only
+  let totalReq = 0, doneReq = 0;
+  list.forEach(sec => sec.items.forEach(it => {
+    if(!it.required) return;
+    if(!itemIsVisible(it, sec.items)) return;
+    totalReq++;
+    if(itemIsComplete(it)) doneReq++;
+  }));
+  const pct = totalReq ? Math.round(doneReq/totalReq*100) : 0;
+  const sections = list.map((sec, sIdx) => {
+    const items = sec.items.map((it, iIdx) => itemHtml(cg.id, sIdx, iIdx, it, sec.items)).filter(Boolean).join('');
+    if(!items) return '';
+    return `<div class="ci-section">
+      <div class="ci-section-head">${esc(sec.section)}</div>
+      ${items}
+    </div>`;
+  }).filter(Boolean).join('');
+  return `<div class="chk-wrap">
+    <div class="chk-head">
+      <span class="chk-title">чек-лист</span>
+      <span class="chk-progress">${doneReq}/${totalReq}</span>
+    </div>
+    <div class="chk-bar"><div class="chk-bar-fill" style="width:${pct}%"></div></div>
+    <div class="ci-sections">${sections}</div>
+  </div>`;
+}
+
+// Verified cleanings collapse into a compact «принято» card — no checklist/photos/buttons.
+// Cleaner sees that work was accepted without the busy interactive surface still around.
+function verifiedCardHtml(cg){
+  const time = cleaningTime(cg);
+  const apt = esc(cg.obj || '—');
+  const cgDate = (cg.scheduled_at || '').slice(0,10);
+  // Verified-at display — relative if today, else date.
+  const today = todayYMD();
+  const verifiedAt = cg.verified_at || '';
+  let verifiedTxt = '';
+  if(verifiedAt){
+    if(verifiedAt === today) verifiedTxt = 'принято сегодня';
+    else verifiedTxt = `принято ${fmtDateShortRu(verifiedAt)}`;
+  } else {
+    verifiedTxt = 'принято';
+  }
+  return `<div class="cln-verified-card">
+    <div class="cvc-ico"><i class="ti ti-circle-check-filled"></i></div>
+    <div class="cvc-body">
+      <div class="cvc-title">${apt}</div>
+      <div class="cvc-sub">${time} · ${fmtDateShortRu(cgDate)}</div>
+    </div>
+    <div class="cvc-stamp">${verifiedTxt}</div>
+  </div>`;
+}
+
+function cardHtml(cg){
+  // Verified — short-circuit to compact card. No checklist, no photos, no buttons.
+  if(cg.status === 'verified') return verifiedCardHtml(cg);
+  const time = cleaningTime(cg);
+  const apt = esc(cg.obj || '—');
+  const aptCfg = S.owners[cg.obj] || {};
+  const addr = aptCfg.address ? `<div class="cln-meta-row"><i class="ti ti-map-pin"></i><span>${esc(aptCfg.address)}${aptCfg.floor ? ', этаж ' + esc(aptCfg.floor) : ''}</span></div>` : '';
+  // Booking context — guest count for bedding planning
+  const bk = cg.bookingId ? S.bookings.find(b => b.id === cg.bookingId) : null;
+  const guestRow = bk
+    ? `<div class="cln-meta-row"><i class="ti ti-users"></i><span>гостей: ${bk.adults || '?'}${(bk.adults || 0) > 2 ? ' · нужен доп.комплект белья' : ''}</span></div>`
+    : '';
+  const notes = cg.notes ? `<div class="cln-notes">${esc(cg.notes)}</div>` : '';
+  const stCls = `is-${cg.status || 'awaiting_checkout'}`;
+  const stLbl = STATUS_LBL[cg.status] || cg.status;
+  const action = actionForStatus(cg);
+  const actionHtml = action
+    ? `<button class="cln-action ${action.kind}" onclick="setStatus('${cg.id}','${action.next}')"><i class="ti ${action.icon}"></i> ${action.label}</button>`
+    : (cg.status === 'done'
+        ? `<button class="cln-action is-done" disabled><i class="ti ti-clock"></i> ждёт проверки</button>`
+        : (cg.status === 'verified'
+            ? `<button class="cln-action is-verified" disabled><i class="ti ti-circle-check-filled"></i> уборка принята</button>`
+            : ''));
+  // "is-now" highlight: today + status is ready_to_start or in_progress
+  const today = todayYMD();
+  const cgDate = (cg.scheduled_at || '').slice(0,10);
+  const isToday = cgDate === today;
+  const isNow = isToday && (cg.status === 'ready_to_start' || cg.status === 'in_progress');
+  const cardCls = `cln-card${isToday ? ' is-today' : ''}${isNow ? ' is-now' : ''}`;
+  return `<div class="${cardCls}">
+    <div class="cln-head">
+      <div>
+        <div class="cln-time">${time}</div>
+        <div class="cln-time-sub">${fmtDateShortRu(cgDate)}</div>
+      </div>
+      <div class="cln-apt">${apt}</div>
+    </div>
+    <div class="cln-meta">
+      ${addr}
+      ${guestRow}
+    </div>
+    ${notes}
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <span class="cln-status ${stCls}">${stLbl}</span>
+    </div>
+    ${checklistHtml(cg)}
+    ${photosHtml(cg)}
+    ${actionHtml}
+  </div>`;
+}
+
+function miniHtml(cg){
+  const time = cleaningTime(cg);
+  const cgDate = (cg.scheduled_at || '').slice(0,10);
+  const stCls = `is-${cg.status || 'awaiting_checkout'}`;
+  const stLbl = STATUS_LBL[cg.status] || cg.status;
+  return `<div class="cln-mini">
+    <span class="cln-mini-time">${time}</span>
+    <span class="cln-mini-apt">${esc(cg.obj || '—')}</span>
+    <span class="cln-status ${stCls}">${stLbl}</span>
+  </div>`;
+}
+
+function render(){
+  document.getElementById('hi-name').textContent = ME.name || '—';
+  document.getElementById('hi-date').textContent = fmtDateLongRu(todayYMD());
+  const today = todayYMD();
+  // 7 days ahead
+  const ahead = new Date();
+  ahead.setDate(ahead.getDate() + 7);
+  const aheadIso = `${ahead.getFullYear()}-${String(ahead.getMonth()+1).padStart(2,'0')}-${String(ahead.getDate()).padStart(2,'0')}`;
+  // 3 days back (recent history)
+  const back = new Date();
+  back.setDate(back.getDate() - 3);
+  const backIso = `${back.getFullYear()}-${String(back.getMonth()+1).padStart(2,'0')}-${String(back.getDate()).padStart(2,'0')}`;
+
+  // Filter cleanings for this cleaner — explicit OR via apt default
+  const mine = S.cleanings.filter(cg => {
+    if(cg.status === 'cancelled') return false;
+    const aptDefault = (S.owners[cg.obj] || {}).defaultCleanerId || null;
+    const eff = cg.cleanerId || aptDefault;
+    return eff === ME.id;
+  });
+
+  const todayList = mine
+    .filter(cg => (cg.scheduled_at || '').slice(0,10) === today)
+    .sort((a,b) => (a.scheduled_at || '').localeCompare(b.scheduled_at || ''));
+  const upcoming = mine
+    .filter(cg => {
+      const d = (cg.scheduled_at || '').slice(0,10);
+      return d > today && d <= aheadIso;
+    })
+    .sort((a,b) => (a.scheduled_at || '').localeCompare(b.scheduled_at || ''));
+  const recent = mine
+    .filter(cg => {
+      const d = (cg.scheduled_at || '').slice(0,10);
+      return d >= backIso && d < today;
+    })
+    .sort((a,b) => (b.scheduled_at || '').localeCompare(a.scheduled_at || ''));
+
+  // Group cleanings by YYYY-MM-DD date string. Returns ordered array of [dateStr, [cg,...]].
+  const groupByDay = (arr, asc = true) => {
+    const map = {};
+    arr.forEach(cg => {
+      const d = (cg.scheduled_at || '').slice(0,10);
+      if(!d) return;
+      (map[d] = map[d] || []).push(cg);
+    });
+    const keys = Object.keys(map).sort((a,b) => asc ? a.localeCompare(b) : b.localeCompare(a));
+    return keys.map(k => [k, map[k]]);
+  };
+
+  // Day-group helpers (cards / minis)
+  const renderDayGroup = (dateStr, cleanings, useMini) => {
+    const label = friendlyDayLabel(dateStr);
+    const rows = cleanings
+      .sort((a,b) => (a.scheduled_at || '').localeCompare(b.scheduled_at || ''))
+      .map(useMini ? miniHtml : cardHtml).join('');
+    return `<div class="day-group">
+      <div class="day-group-head">
+        <span class="day-group-date">${label}</span>
+        <span class="day-group-count">${cleanings.length} ${pluralRu(cleanings.length,'уборка','уборки','уборок')}</span>
+      </div>
+      ${rows}
+    </div>`;
+  };
+
+  let html = '';
+  if(todayList.length){
+    html += `<div class="sect"><span class="sect-lbl">сегодня</span><span class="sect-meta">· ${todayList.length}</span></div>`;
+    html += todayList.map(cardHtml).join('');
+  } else {
+    html += `<div class="empty"><i class="ti ti-mug"></i><div class="empty-msg">сегодня уборок нет —<br>свободный день</div></div>`;
+  }
+  if(upcoming.length){
+    html += `<div class="sect"><span class="sect-lbl">впереди</span><span class="sect-meta">· ${upcoming.length}</span></div>`;
+    const groups = groupByDay(upcoming, true);
+    html += groups.map(([d, arr]) => renderDayGroup(d, arr, false)).join('');
+  }
+  if(recent.length){
+    html += `<div class="sect"><span class="sect-lbl">недавно</span><span class="sect-meta">· ${recent.length}</span></div>`;
+    const groups = groupByDay(recent, false);
+    html += groups.map(([d, arr]) => renderDayGroup(d, arr, true)).join('');
+  }
+  document.getElementById('content').innerHTML = html;
+  // Async: replace data-path placeholders on photo thumbnails with their signed URLs.
+  hydratePhotoThumbnails().catch(e => console.warn('thumb hydrate failed', e));
+}
+
+// ============================================================
+// Background polling — keeps cleaner's view fresh + detects «verified» transitions.
+// Every 30s we re-fetch settings.cleanings, compare statuses against the last
+// snapshot, and if any of MY cleanings went from non-verified → verified, fire
+// the celebration toast (and a browser notification if permission granted).
+// ============================================================
+const POLL_INTERVAL_MS = 30000;
+const PREV_STATUS_BY_ID = {};
+
+function snapshotStatuses(){
+  if(!ME) return;
+  (S.cleanings || []).forEach(cg => {
+    const aptDefault = (S.owners[cg.obj] || {}).defaultCleanerId || null;
+    const eff = cg.cleanerId || aptDefault;
+    if(eff !== ME.id) return;
+    PREV_STATUS_BY_ID[cg.id] = cg.status;
+  });
+}
+
+function detectVerifiedTransitions(){
+  if(!ME) return [];
+  const transitions = [];
+  (S.cleanings || []).forEach(cg => {
+    const aptDefault = (S.owners[cg.obj] || {}).defaultCleanerId || null;
+    const eff = cg.cleanerId || aptDefault;
+    if(eff !== ME.id) return;
+    const prev = PREV_STATUS_BY_ID[cg.id];
+    if(prev && prev !== 'verified' && cg.status === 'verified'){
+      transitions.push(cg);
+    }
+    PREV_STATUS_BY_ID[cg.id] = cg.status;
+  });
+  return transitions;
+}
+
+function showVerifiedToast(cleanings){
+  if(!cleanings.length) return;
+  const sub = cleanings.map(cg => esc(cg.obj || '—')).join(', ');
+  document.getElementById('tc-sub').textContent = `${cleanings.length === 1 ? 'Артём проверил' : 'Артём проверил уборки'}: ${sub}`;
+  document.getElementById('toast-celebrate').style.display = 'flex';
+  // Fire OS notification too if granted
+  if(typeof Notification !== 'undefined' && Notification.permission === 'granted'){
+    try{
+      new Notification('Уборка принята', {
+        body: `Артём проверил: ${sub}`,
+        icon: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="%235DCAA5"/><path d="M20 32 l8 8 l16-16" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+      });
+    }catch(e){ /* ignore */ }
+  }
+}
+
+function dismissToast(){
+  document.getElementById('toast-celebrate').style.display = 'none';
+}
+
+// Best-effort permission request — non-blocking. Triggered by first user interaction
+// (after init, on any click). Browser ignores subsequent requests so this is safe.
+let _notifPermAsked = false;
+function maybeAskNotificationPermission(){
+  if(_notifPermAsked) return;
+  if(typeof Notification === 'undefined') return;
+  if(Notification.permission !== 'default') return;
+  _notifPermAsked = true;
+  // Defer a bit so it doesn't fire immediately on page load
+  setTimeout(() => {
+    try{ Notification.requestPermission(); }catch(e){}
+  }, 2500);
+}
+
+async function pollOnce(){
+  try{
+    await loadAll();
+    // Re-bind ME (cleaner object may have updated)
+    if(ME) ME = S.cleaners.find(c => c.id === ME.id) || ME;
+    const trans = detectVerifiedTransitions();
+    if(trans.length) showVerifiedToast(trans);
+    render();
+  }catch(e){ console.warn('poll failed', e); }
+}
+
+// ============================================================
+// Init
+// ============================================================
+async function init(){
+  const token = getToken();
+  if(!token){
+    document.getElementById('loading').classList.add('fade');
+    document.getElementById('gate').style.display = '';
+    return;
+  }
+  try{
+    await loadAll();
+  }catch(e){
+    console.error(e);
+    document.getElementById('loading').textContent = 'ошибка загрузки. обнови страницу.';
+    return;
+  }
+  ME = S.cleaners.find(c => c.token === token);
+  if(!ME){
+    document.getElementById('loading').classList.add('fade');
+    document.getElementById('gate').style.display = '';
+    return;
+  }
+  // Admin-preview mode: show banner, skip polling (no point — admin uses admin tab anyway).
+  if(isPreviewMode()){
+    document.getElementById('preview-banner').style.display = '';
+  }
+  render();
+  document.getElementById('loading').classList.add('fade');
+  document.getElementById('app').style.display = '';
+  // Initialise the snapshot AFTER first render so the next poll detects real transitions only.
+  snapshotStatuses();
+  // Skip polling + notification permission in preview mode — admin doesn't need them.
+  if(!isPreviewMode()){
+    document.addEventListener('click', maybeAskNotificationPermission, { once:false });
+    setInterval(pollOnce, POLL_INTERVAL_MS);
+  }
+}
+init();
+</script>
+</body>
+</html>
